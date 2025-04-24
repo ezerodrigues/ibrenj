@@ -25,7 +25,7 @@
         }
 
         header {
-            background-color: #1a5276;
+            background-color: #1B5E20; /* Verde escuro da logo NH */
             color: white;
             padding: 20px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -33,14 +33,33 @@
 
         .header-content {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 0 20px;
         }
 
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 50%;
+            background-color: #fff;
+            padding: 3px;
+            object-fit: contain; /* Para garantir que a imagem se ajuste bem no espaço */
+        }
+
+        .logo-text {
             font-size: 28px;
             font-weight: bold;
             text-align: center;
+            text-transform: uppercase;
+            margin: 0 auto; /* Centraliza o texto no container */
         }
 
         main {
@@ -50,7 +69,7 @@
         h1 {
             font-size: 32px;
             margin-bottom: 30px;
-            color: #1a5276;
+            color: #1B5E20; /* Verde escuro da logo NH */
             text-align: center;
         }
 
@@ -65,7 +84,7 @@
 
         .form-container h2 {
             margin-bottom: 25px;
-            color: #1a5276;
+            color: #1B5E20; /* Verde escuro da logo NH */
             text-align: center;
             font-size: 24px;
         }
@@ -99,7 +118,7 @@
         }
 
         button {
-            background-color: #1a5276;
+            background-color: #1B5E20; /* Verde escuro da logo NH */
             color: white;
             border: none;
             padding: 14px 20px;
@@ -113,11 +132,11 @@
         }
 
         button:hover {
-            background-color: #154360;
+            background-color: #2E7D32; /* Verde mais claro para hover */
         }
 
         footer {
-            background-color: #1a5276;
+            background-color: #1B5E20; /* Verde escuro da logo NH */
             color: white;
             padding: 20px 0;
             text-align: center;
@@ -162,7 +181,7 @@
                 font-size: 26px;
             }
             
-            .logo {
+            .logo-text {
                 font-size: 24px;
             }
         }
@@ -171,7 +190,11 @@
 <body>
     <header>
         <div class="container header-content">
-            <div class="logo">IBRENJ Comunicação</div>
+            <div class="logo-container">
+                <!-- Imagem corrigida com caminho atualizado -->
+                <img src="assets/Logo.png" alt="Logo IBRENJ" class="logo-img">
+                <div class="logo-text">IBRENJ COMUNICAÇÃO</div>
+            </div>
         </div>
     </header>
 
