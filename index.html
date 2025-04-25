@@ -2,8 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Formulário de cadastro de eventos da IBRENJ Comunicação">
+    <meta name="theme-color" content="#1B5E20">
     <title>IBRENJ Comunicação - Cadastro de Eventos</title>
+    <!-- Adiciona link para favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <!-- Separação do CSS para um arquivo externo (boa prática) -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Estilos críticos inline para carregamento mais rápido -->
     <style>
         * {
             margin: 0;
@@ -45,8 +52,8 @@
         }
 
         .logo-img {
-            width: 50px;
-            height: 50px;
+            width: 100px;
+            height: 100px;
             margin-right: 15px;
             border-radius: 50%;
             background-color: #fff;
@@ -172,6 +179,71 @@
             z-index: 999;
         }
 
+        .preview-container {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .preview-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .preview-item:last-child {
+            border-bottom: none;
+        }
+        
+        .preview-label {
+            font-weight: 600;
+            color: #1B5E20;
+            margin-bottom: 5px;
+        }
+        
+        .preview-value {
+            color: #333;
+        }
+        
+        .preview-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .preview-buttons button {
+            width: 48%;
+        }
+        
+        .btn-edit {
+            background-color: #f8f9fa;
+            color: #1B5E20;
+            border: 1px solid #1B5E20;
+        }
+        
+        .btn-edit:hover {
+            background-color: #e9ecef;
+        }
+
+        .field-error {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        /* Media Query para dispositivos móveis - MOVIDO PARA DENTRO DO STYLE */
         @media (max-width: 768px) {
             .form-container {
                 padding: 20px;
@@ -184,6 +256,22 @@
             .logo-text {
                 font-size: 24px;
             }
+            
+            .preview-buttons {
+                flex-direction: column;
+            }
+            
+            .preview-buttons button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Ajustes específicos para iOS */
+        @media screen and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+            input, select, textarea {
+                font-size: 16px; /* Previne zoom automático no iOS */
+            }
         }
     </style>
 </head>
@@ -191,8 +279,8 @@
     <header>
         <div class="container header-content">
             <div class="logo-container">
-                <!-- Imagem corrigida com caminho atualizado -->
-                <img src="assets/Logo.png" alt="Logo IBRENJ" class="logo-img">
+                <!-- Adiciona atributos alt e loading para melhor acessibilidade e performance -->
+                <img src="assets/Logo.png" alt="Logo IBRENJ" class="logo-img" loading="eager">
                 <div class="logo-text">IBRENJ COMUNICAÇÃO</div>
             </div>
         </div>
@@ -201,58 +289,83 @@
     <main class="container">
         <div class="form-container">
             <h2>Cadastro de Informações de Eventos</h2>
-            <form id="eventForm">
+            <!-- Adiciona novalidate para permitir validação personalizada via JavaScript -->
+            <form id="eventForm" novalidate>
                 <div class="form-group">
                     <label for="department">Departamento:</label>
-                    <select id="department" name="department" required>
+                    <select id="department" name="department" required aria-required="true">
                         <option value="">Selecione um departamento</option>
                         <option value="Adore">Adore</option>
                         <option value="Ativadas">Ativadas</option>
                         <option value="Comunicação">Comunicação</option>
                         <option value="Consolidação">Consolidação</option>
                         <option value="Criare">Criare</option>
+                        <option value="Culto na rua">Culto na rua</option>
+                        <option value="Cursos de Família">Cursos de Família</option>
+                        <option value="Esportes">Esportes</option>
                         <option value="Evangelismo">Evangelismo</option>
                         <option value="Juventude">Juventude</option>
                         <option value="Melhor Idade">Melhor Idade</option>
                         <option value="Sacerdotes">Sacerdotes</option>
                     </select>
+                    <div class="field-error" id="department-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="responsible">Responsável:</label>
-                    <input type="text" id="responsible" name="responsible" required>
+                    <input type="text" id="responsible" name="responsible" required aria-required="true">
+                    <div class="field-error" id="responsible-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
+                    <div class="field-error" id="email-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="event">Evento:</label>
-                    <input type="text" id="event" name="event" required>
+                    <input type="text" id="event" name="event" required aria-required="true">
+                    <div class="field-error" id="event-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="datetime">Data e Hora do Evento:</label>
-                    <input type="datetime-local" id="datetime" name="datetime" required>
+                    <input type="datetime-local" id="datetime" name="datetime" required aria-required="true">
+                    <div class="field-error" id="datetime-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="location">Local:</label>
-                    <input type="text" id="location" name="location" required>
+                    <input type="text" id="location" name="location" required aria-required="true">
+                    <div class="field-error" id="location-error"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="additional">Informações adicionais:</label>
-                    <textarea id="additional" name="additional" rows="5"></textarea>
+                    <textarea id="additional" name="additional" rows="5" required aria-required="true"></textarea>
+                    <div class="field-error" id="additional-error"></div>
                 </div>
                 
-                <button type="submit">Enviar Cadastro</button>
-                <div class="overlay" id="overlay"></div>
-                <div class="success-message" id="successMessage">
-                    <p>Cadastro enviado com sucesso!</p>
+                <button type="submit" id="submitButton">Enviar Cadastro</button>
+                
+                <!-- Overlay para diálogos -->
+                <div class="overlay" id="overlay" role="dialog" aria-hidden="true"></div>
+                
+                <!-- Mensagem de sucesso com atributos de acessibilidade -->
+                <div class="success-message" id="successMessage" role="alertdialog" aria-labelledby="successTitle">
+                    <p id="successTitle">Cadastro enviado com sucesso!</p>
                     <p style="margin-top: 10px; font-size: 16px;">Seu evento foi registrado na IBRENJ Comunicação.</p>
+                </div>
+                
+                <!-- Container de pré-visualização com atributos de acessibilidade -->
+                <div class="preview-container" id="previewContainer" role="dialog" aria-labelledby="previewTitle">
+                    <h3 id="previewTitle" style="text-align: center; color: #1B5E20; margin-bottom: 25px;">Confira os dados informados</h3>
+                    <div id="previewContent"></div>
+                    <div class="preview-buttons">
+                        <button type="button" class="btn-edit" id="btnEdit">Editar</button>
+                        <button type="button" id="btnConfirm">Confirmar</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -264,30 +377,265 @@
         </div>
     </footer>
 
+    <!-- Script movido para o final do documento para melhor performance -->
     <script>
+        // Detecta se é um dispositivo móvel
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        // Verifica se há dados salvos previamente
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormData();
+        });
+
+        // Função para validar email com expressão regular
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        // Validação em tempo real para campos importantes
+        document.getElementById('email').addEventListener('blur', function() {
+            if (this.value && !validateEmail(this.value)) {
+                showFieldError(this, 'Por favor, insira um email válido');
+            } else {
+                clearFieldError(this);
+            }
+        });
+
+        // Funções de validação e exibição de erros
+        function showFieldError(field, message) {
+            const errorId = field.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            field.setAttribute('aria-invalid', 'true');
+            field.style.borderColor = '#d32f2f';
+        }
+
+        function clearFieldError(field) {
+            const errorId = field.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.style.display = 'none';
+            }
+            field.setAttribute('aria-invalid', 'false');
+            field.style.borderColor = '';
+        }
+
+        // Salvar dados do formulário no localStorage
+        function saveFormData() {
+            const formData = {
+                department: document.getElementById('department').value,
+                responsible: document.getElementById('responsible').value,
+                email: document.getElementById('email').value,
+                event: document.getElementById('event').value,
+                datetime: document.getElementById('datetime').value,
+                location: document.getElementById('location').value,
+                additional: document.getElementById('additional').value
+            };
+            
+            localStorage.setItem('eventFormData', JSON.stringify(formData));
+        }
+
+        // Carregar dados salvos do localStorage
+        function loadFormData() {
+            const savedData = localStorage.getItem('eventFormData');
+            if (savedData) {
+                try {
+                    const formData = JSON.parse(savedData);
+                    document.getElementById('department').value = formData.department || '';
+                    document.getElementById('responsible').value = formData.responsible || '';
+                    document.getElementById('email').value = formData.email || '';
+                    document.getElementById('event').value = formData.event || '';
+                    document.getElementById('datetime').value = formData.datetime || '';
+                    document.getElementById('location').value = formData.location || '';
+                    document.getElementById('additional').value = formData.additional || '';
+                } catch (e) {
+                    console.error('Erro ao carregar dados salvos:', e);
+                    localStorage.removeItem('eventFormData');
+                }
+            }
+        }
+
+        // Auto-salvar ao digitar
+        document.querySelectorAll('#eventForm input, #eventForm select, #eventForm textarea').forEach(el => {
+            el.addEventListener('input', saveFormData);
+        });
+
+        // Função para validar todos os campos
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = document.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                clearFieldError(field);
+                
+                if (!field.value.trim()) {
+                    showFieldError(field, 'Este campo é obrigatório');
+                    isValid = false;
+                } else if (field.id === 'email' && !validateEmail(field.value)) {
+                    showFieldError(field, 'Por favor, insira um email válido');
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Handler do evento de submit
         document.getElementById('eventForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            // Aqui você adicionaria o código para enviar os dados do formulário para seu servidor
-            // Por exemplo, usando fetch() ou XMLHttpRequest
+            // Validação completa antes de mostrar preview
+            if (!validateForm()) {
+                // Foca no primeiro campo com erro
+                document.querySelector('[aria-invalid="true"]').focus();
+                return;
+            }
             
-            // Mostra o overlay e a mensagem de sucesso
+            // Capturar dados do formulário
+            const department = document.getElementById('department').value;
+            const responsible = document.getElementById('responsible').value;
+            const email = document.getElementById('email').value;
+            const eventName = document.getElementById('event').value;
+            const datetime = document.getElementById('datetime').value;
+            const location = document.getElementById('location').value;
+            const additional = document.getElementById('additional').value;
+            
+            // Formatação da data e hora para exibição
+            const formattedDate = new Date(datetime).toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Montar HTML da prévia
+            let previewHTML = '';
+            previewHTML += createPreviewItem('Departamento', department);
+            previewHTML += createPreviewItem('Responsável', responsible);
+            previewHTML += createPreviewItem('Email', email);
+            previewHTML += createPreviewItem('Evento', eventName);
+            previewHTML += createPreviewItem('Data e Hora', formattedDate);
+            previewHTML += createPreviewItem('Local', location);
+            previewHTML += createPreviewItem('Informações Adicionais', additional);
+            
+            // Inserir HTML na prévia
+            document.getElementById('previewContent').innerHTML = previewHTML;
+            
+            // Mostrar overlay e container de prévia
             document.getElementById('overlay').style.display = 'block';
+            document.getElementById('previewContainer').style.display = 'block';
+            document.getElementById('overlay').setAttribute('aria-hidden', 'false');
+            document.getElementById('previewContainer').setAttribute('aria-hidden', 'false');
+            
+            // Acessibilidade - foco no container de preview
+            document.getElementById('previewTitle').focus();
+        });
+        
+        // Função auxiliar para criar um item de prévia
+        function createPreviewItem(label, value) {
+            // Escapar HTML para prevenir XSS
+            const escapedValue = value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+                
+            return `
+                <div class="preview-item">
+                    <div class="preview-label">${label}:</div>
+                    <div class="preview-value">${escapedValue}</div>
+                </div>
+            `;
+        }
+        
+        // Botão Editar - fecha a prévia e volta ao formulário
+        document.getElementById('btnEdit').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('overlay').setAttribute('aria-hidden', 'true');
+            document.getElementById('previewContainer').setAttribute('aria-hidden', 'true');
+            
+            // Retorna o foco ao formulário
+            document.getElementById('submitButton').focus();
+        });
+        
+        // Botão Confirmar - fecha a prévia e mostra mensagem de sucesso
+        document.getElementById('btnConfirm').addEventListener('click', function() {
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('previewContainer').setAttribute('aria-hidden', 'true');
             document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('successMessage').setAttribute('aria-hidden', 'false');
             
-            // Limpar o formulário para permitir um novo cadastro
-            this.reset();
+            // Simular envio dos dados (aqui substituir por chamada real ao backend)
+            // Exemplo: submitFormToServer();
             
-            // Fechar a mensagem quando clicar nela ou no overlay
-            document.getElementById('overlay').addEventListener('click', function() {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('successMessage').style.display = 'none';
+            // Limpar o formulário e storage para permitir um novo cadastro
+            document.getElementById('eventForm').reset();
+            localStorage.removeItem('eventFormData');
+            
+            // Aqui seria o lugar ideal para enviar os dados para o servidor
+            // Por exemplo, usando fetch:
+            /*
+            fetch('api/eventos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    department: department,
+                    responsible: responsible,
+                    email: email,
+                    event: eventName,
+                    datetime: datetime,
+                    location: location,
+                    additional: additional
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Sucesso:', data);
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao enviar o formulário. Tente novamente.');
             });
-            
-            document.getElementById('successMessage').addEventListener('click', function() {
+            */
+        });
+        
+        // Fechar a mensagem quando clicar nela ou no overlay
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('overlay').setAttribute('aria-hidden', 'true');
+            document.getElementById('previewContainer').setAttribute('aria-hidden', 'true');
+            document.getElementById('successMessage').setAttribute('aria-hidden', 'true');
+        });
+        
+        document.getElementById('successMessage').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('overlay').setAttribute('aria-hidden', 'true');
+            document.getElementById('successMessage').setAttribute('aria-hidden', 'true');
+        });
+
+        // Suporte a tecla ESC para fechar modais
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
                 document.getElementById('overlay').style.display = 'none';
+                document.getElementById('previewContainer').style.display = 'none';
                 document.getElementById('successMessage').style.display = 'none';
-            });
+                document.getElementById('overlay').setAttribute('aria-hidden', 'true');
+                document.getElementById('previewContainer').setAttribute('aria-hidden', 'true');
+                document.getElementById('successMessage').setAttribute('aria-hidden', 'true');
+            }
         });
     </script>
 </body>
